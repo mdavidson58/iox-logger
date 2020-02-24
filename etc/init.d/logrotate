@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# is the syslog_server2 field set in the configfile
+var=`awk '/syslog_server2/{ print $3 }' /data/package_config.ini`
+
+# if not set remove it from /etc/syslog.conf
+if [ -z $var ]; then
+        sed -i -e '/\/data\/logs\/syslog.log/!d' /etc/syslog.conf
+else
+#if set add it to the /etc/syslog.conf
+# delete any old copy
+        sed -i -e '/\/data\/logs\/syslog.log/!d' /etc/syslog.conf
+
+        var2="*.*;auth,authpriv.none            "$var
+        echo $var2 >> /etc/syslog.conf
+fi
+
+# for backward compat
+cd /usr/src/app
+/usr/bin/python logrotate.py
