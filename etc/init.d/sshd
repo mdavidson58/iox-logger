@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/sbin/sshd -h /etc/ssh/sshd.key -p 3333 -f /etc/ssh/sshd_config
