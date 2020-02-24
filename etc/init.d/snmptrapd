@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/sbin/snmptrapd  -a -c /etc/snmp/snmptrapd.conf -L s 6
