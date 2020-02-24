@@ -1,0 +1,4 @@
+::sysinit:/bin/sh /etc/init.d/syslogd
+::sysinit:/bin/sh /etc/init.d/snmptrapd
+::sysinit:/bin/sh /etc/init.d/sshd
+::sysinit:/bin/sh /etc/init.d/logrotate
