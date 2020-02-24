@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# for backward compat
+/usr/sbin/syslogd -r 
