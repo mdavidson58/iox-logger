@@ -27,3 +27,6 @@ snmp-server community public RO
 The docker with the pre-built application is here:
 
 docker pull mdavidson58/iox_logger:2.5
+
+You can also build the docker image using the command from the local directory:
+docker build . 
