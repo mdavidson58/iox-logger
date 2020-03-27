@@ -16,6 +16,7 @@ mqtt_topic = RAMA # TOPIC used to store logging data
 rotate_days = 1 # Number of days before rotating logs to a new log file
 num_logs = 5 # number of logs to store on the USB Flash drive
 syslog_server2 = # IP address if sending logs to a remote syslog server. Blank if no other syslog server
+syslog_server2_port = # port of remote syslog server.
 
 The following lines must be set in the GMM advanced template
 
