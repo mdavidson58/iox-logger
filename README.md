@@ -1,5 +1,5 @@
 # iox-logger
-App to store syslog and SNMP Traps from IR 8x9 devices permanent to USB flash.  Also can remotely configure remote syslog server and syslog via MQTT
+App to store syslog and SNMP Traps from IR 8x9 devices permanent to USB flash.  Also can remotely configure remote syslog server and syslog via MQTT.  The default config can be used with the following advanced template.
 
 
 The following package_config.ini file controls aspects of this application:
@@ -19,6 +19,10 @@ syslog_server2 = # IP address if sending logs to a remote syslog server. Blank i
 
 The following lines must be set in the GMM advanced template
 
-snmp-server host ${gw.ip_prefix}.${gw.ip_suffix?number + 2} public
-logging host ${gw.ip_prefix}.${gw.ip_suffix?number + 2}
+snmp-server host ${gw.ip_prefix}.${gw.ip_suffix?number + 1} public udp-port 3162
+logging host ${gw.ip_prefix}.${gw.ip_suffix?number + 1} protocol udp port 3514
 snmp-server community public RO
+
+The docker with the pre-built application is here:
+
+docker pull mdavidson58/iox_logger:2.5
