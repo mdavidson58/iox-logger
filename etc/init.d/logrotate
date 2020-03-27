@@ -1,18 +1,20 @@
 #!/bin/sh
 
-# is the syslog_server2 field set in the configfile
-var=`awk '/syslog_server2/{ print $3 }' /data/package_config.ini`
+# set the clock from IOS
+#add hostname to /etc/hosts
+routerip=`traceroute -m 3 4.4.4.4 | head -3 | tail -1 | awk '{ print $2}'`
 
-# if not set remove it from /etc/syslog.conf
-if [ -z $var ]; then
-        sed -i -e '/\/data\/logs\/syslog.log/!d' /etc/syslog.conf
+/usr/sbin/ntpd -n -q -p $routerip
+
+# set the timezone from configfile
+tz=`awk '/tz/{ print $3 }' /data/package_config.ini`
+
+# if not set, then set to UTC
+if [ -z $tz ]; then
+	export TZ=UTC
 else
-#if set add it to the /etc/syslog.conf
-# delete any old copy
-        sed -i -e '/\/data\/logs\/syslog.log/!d' /etc/syslog.conf
-
-        var2="*.*;auth,authpriv.none            "$var
-        echo $var2 >> /etc/syslog.conf
+# set new TZ
+	export TZ=$tz
 fi
 
 # for backward compat
