@@ -1,4 +1,54 @@
 #!/bin/sh
+# set the timezone from configfile
+tz=`awk '/tz/{ print $3 }' /data/package_config.ini`
 
+# if not set, then set to UTC
+if [ -z $tz ]; then
+        export TZ=UTC
+else
+# set new TZ                                       
+        export TZ=$tz                                            
+fi  
+
+# get vars from the configfile
+dstsvr=`awk '/syslog_server2 /{ print $3 }' /data/package_config.ini`
+dstport=`awk '/syslog_server2_port/{ print $3 }' /data/package_config.ini`
+serno=`awk '/gw.serial/{ print $3 }' /data/package_config.ini`
+
+# set log hostname to be gw serial number
+oldhostname=`awk '/LocalHostName/ { print $2 }' /etc/rsyslog.conf`
+newhostname=`echo \"$serno\"`
+sed -i -e "/LocalHostName/s/$oldhostname/$newhostname/g" /etc/rsyslog.conf
+
+#add hostname to /etc/hosts
+routerip=`traceroute -m 3 4.4.4.4 | head -3 | tail -1 | awk '{ print $2 }'`
+hostip=`awk "/$routerip/{ print $1 }" /etc/hosts`
+if [ -z $hostip ]; then
+	 echo $routerip $serno | cat >> /etc/hosts
+else
+	sed -i -e "s/$hostip/$routerip/g" /etc/hosts
+fi
+
+# if not set remove it from /etc/syslog.conf
+if [ -z $dstsvr ]; then
+	sed -i -e 's/\*.\* action/\#\*.\* action/g' /etc/rsyslog.conf
+else
+#if set add it to the /etc/syslog.conf
+# delete any old copy
+
+	sed -i -e 's/\#\*.\* action/\*.\* action/g' /etc/rsyslog.conf
+
+# get old vars
+	oldsvr=`awk '/\*.\* action/ { print $4 }' /etc/rsyslog.conf`
+	oldport=`awk '/\*.\* action/ { print $5 }' /etc/rsyslog.conf`
+	newsvr=`echo target=\"$dstsvr\"`
+	newport=`echo port=\"$dstport\"`
+
+#add new vars
+	sed -i -e "/\*.\*/s/$oldsvr/$newsvr/g" /etc/rsyslog.conf
+	sed -i -e "/\*.\*/s/$oldport/$newport/g" /etc/rsyslog.conf
+
+fi
 # for backward compat
-/usr/sbin/syslogd -r 
+#/usr/sbin/syslogd -r 
+/usr/sbin/rsyslogd
