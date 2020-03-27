@@ -1,3 +1,13 @@
 #!/bin/sh
+# set the timezone from configfile
+tz=`awk '/tz/{ print $3 }' /data/package_config.ini`
+
+# if not set, then set to UTC
+if [ -z $tz ]; then
+        export TZ=UTC
+else
+# set new TZ                                       
+        export TZ=$tz                                            
+fi  
 
 /usr/sbin/sshd -h /etc/ssh/sshd.key -p 3333 -f /etc/ssh/sshd_config
