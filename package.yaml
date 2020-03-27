@@ -1,0 +1,53 @@
+descriptor-schema-version: "2.5"
+
+info:
+  name: "iox_loggingserver2.5"
+  description: "simple docker snmp/syslog server"
+  version: "2.5"
+  author-link: "http://www.cisco.com"
+  author-name: "Mark Davidson"
+
+app:
+  cpuarch: "x86_64"
+  type: docker
+  resources:
+    profile: c1.medium
+    network:
+      -
+        interface-name: eth0
+        ports:
+            tcp: [3514, 3333]
+            udp: [3514, 3161, 3162]
+
+    devices:
+     -  
+        device-id: serial
+        label: HOST_DEV0
+        type: serial
+        usage: "Serial Adaptor 0"
+     -
+        device-id: serial
+        label: HOST_DEV1
+        type: serial
+        usage: "Serial Adaptor 1"
+     -
+        device-id: serial
+        label: HOST_DEV2
+        type: serial
+        usage: "Serial Adaptor 2"
+     -
+        device-id: serial
+        label: HOST_DEV3
+        type: serial
+        usage: "Serial Adaptor 3"
+     -
+        type: usbdev
+        label: HOST_DEV4
+        usage: "External for persistent message queues"
+        function: storage
+        mandatory: True
+        mount-point: /mnt
+
+  startup:
+    rootfs: rootfs.tar
+    target: ["/sbin/init"]
