@@ -1,3 +1,13 @@
 #!/bin/sh
+# set the timezone from configfile
+tz=`awk '/tz/{ print $3 }' /data/package_config.ini`
 
-/usr/sbin/snmptrapd  -a -c /etc/snmp/snmptrapd.conf -L s 6
+# if not set, then set to UTC
+if [ -z $tz ]; then
+        export TZ=UTC
+else
+# set new TZ                                       
+        export TZ=$tz                                            
+fi  
+
+/usr/sbin/snmptrapd  -a -c /etc/snmp/snmptrapd.conf -L s 6 udp:3162
