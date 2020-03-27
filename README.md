@@ -30,3 +30,5 @@ docker pull mdavidson58/iox_logger:2.5
 
 You can also build the docker image using the command from the local directory:
 docker build . 
+docker commit "containername" "dockerimagename"
+ioxclient docker package dockerimagename .
