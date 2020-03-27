@@ -1,6 +1,7 @@
 # iox-logger
 App to store syslog and SNMP Traps from IR 8x9 devices permanent to USB flash.  Also can remotely configure remote syslog server and syslog via MQTT.  The default config can be used with the following advanced template.
 
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/mdavidson58/iox-logger)
 
 The following package_config.ini file controls aspects of this application:
 
